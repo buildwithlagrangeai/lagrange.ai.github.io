@@ -1,0 +1,1680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lagrange.AI User Guide</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --primary-dark: #1e40af;
+            --secondary-color: #64748b;
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-tertiary: #f1f5f9;
+            --border-color: #e2e8f0;
+            --sidebar-width: 280px;
+            --header-height: 64px;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            color: var(--text-primary);
+            background: var(--bg-secondary);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: var(--header-height);
+            background: var(--bg-primary);
+            border-bottom: 1px solid var(--border-color);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .logo img {
+            height: 36px;
+            width: auto;
+        }
+
+        .version-badge {
+            background: var(--bg-tertiary);
+            padding: 0.25rem 0.75rem;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        /* Navigation */
+        .nav-toggle {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+            color: var(--text-secondary);
+        }
+
+        .sidebar {
+            position: fixed;
+            top: var(--header-height);
+            left: 0;
+            width: var(--sidebar-width);
+            height: calc(100vh - var(--header-height));
+            background: var(--bg-primary);
+            border-right: 1px solid var(--border-color);
+            overflow-y: auto;
+            z-index: 999;
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar-content {
+            padding: 1.5rem 0;
+        }
+
+        .nav-section {
+            margin-bottom: 0.5rem;
+        }
+
+        .nav-section-title {
+            padding: 0.5rem 1.5rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-secondary);
+        }
+
+        .nav-item {
+            position: relative;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 0.625rem 1.5rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.875rem;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: left;
+        }
+
+        .nav-link:hover {
+            color: var(--text-primary);
+            background: var(--bg-secondary);
+        }
+
+        .nav-link.active {
+            color: var(--primary-color);
+            background: var(--bg-secondary);
+            border-left: 3px solid var(--primary-color);
+            padding-left: calc(1.5rem - 3px);
+            font-weight: 500;
+        }
+
+        .nav-link.has-children::after {
+            content: '›';
+            margin-left: auto;
+            transition: transform 0.2s ease;
+        }
+
+        .nav-link.expanded::after {
+            transform: rotate(90deg);
+        }
+
+        .nav-children {
+            display: none;
+            background: var(--bg-secondary);
+        }
+
+        .nav-children.show {
+            display: block;
+        }
+
+        .nav-children .nav-link {
+            padding-left: 3rem;
+            font-size: 0.8125rem;
+        }
+
+        .nav-children .nav-link.active {
+            padding-left: calc(3rem - 3px);
+        }
+
+        /* Main Content */
+        .main-container {
+            margin-left: var(--sidebar-width);
+            margin-top: var(--header-height);
+            min-height: calc(100vh - var(--header-height));
+        }
+
+        .content {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        /* Typography */
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+            line-height: 1.2;
+        }
+
+        h2 {
+            font-size: 1.875rem;
+            font-weight: 600;
+            margin-top: 3rem;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        h4 {
+            font-size: 1.125rem;
+            font-weight: 500;
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+            color: var(--text-primary);
+        }
+
+        p {
+            margin-bottom: 1rem;
+            color: var(--text-secondary);
+            line-height: 1.75;
+        }
+
+        .intro-text {
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            line-height: 1.75;
+        }
+
+        /* Lists */
+        ul, ol {
+            margin-bottom: 1rem;
+            padding-left: 1.5rem;
+            color: var(--text-secondary);
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+            line-height: 1.75;
+        }
+
+        /* Images */
+        .image-container {
+            margin: 2rem 0;
+            background: var(--bg-primary);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .image-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .image-caption {
+            padding: 1rem;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            text-align: center;
+            background: var(--bg-tertiary);
+        }
+
+        /* Cards */
+        .card {
+            background: var(--bg-primary);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.2s ease;
+        }
+
+        .card:hover {
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: var(--text-primary);
+        }
+
+        .card-content {
+            color: var(--text-secondary);
+        }
+
+        /* Callouts */
+        .callout {
+            padding: 1rem 1.25rem;
+            margin: 1.5rem 0;
+            border-radius: 8px;
+            border-left: 4px solid;
+        }
+
+        .callout.info {
+            background: #eff6ff;
+            border-color: var(--primary-color);
+            color: #1e3a8a;
+        }
+
+        .callout.tip {
+            background: #f0fdf4;
+            border-color: var(--success-color);
+            color: #14532d;
+        }
+
+        .callout.warning {
+            background: #fef3c7;
+            border-color: var(--warning-color);
+            color: #78350f;
+        }
+
+        .callout.important {
+            background: #fef2f2;
+            border-color: var(--error-color);
+            color: #7f1d1d;
+        }
+
+        .callout-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Code Blocks */
+        .code-block {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.875rem;
+        }
+
+        /* Tables */
+        .table-container {
+            overflow-x: auto;
+            margin: 1.5rem 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--bg-primary);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        th {
+            background: var(--bg-tertiary);
+            padding: 0.75rem 1rem;
+            text-align: left;
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.025em;
+        }
+
+        td {
+            padding: 0.75rem 1rem;
+            border-top: 1px solid var(--border-color);
+            color: var(--text-secondary);
+        }
+
+        /* Search */
+        .search-container {
+            position: relative;
+            margin-left: auto;
+            margin-right: 2rem;
+        }
+
+        .search-input {
+            padding: 0.5rem 1rem 0.5rem 2.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            width: 300px;
+            font-size: 0.875rem;
+            background: var(--bg-secondary);
+            transition: all 0.2s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            background: var(--bg-primary);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+        }
+
+        .search-results {
+            position: absolute;
+            top: calc(100% + 0.5rem);
+            left: 0;
+            right: 0;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            max-height: 400px;
+            overflow-y: auto;
+            display: none;
+            z-index: 1001;
+        }
+
+        .search-results.show {
+            display: block;
+        }
+
+        .search-result-item {
+            padding: 0.75rem 1rem;
+            cursor: pointer;
+            border-bottom: 1px solid var(--border-color);
+            transition: background 0.2s ease;
+        }
+
+        .search-result-item:last-child {
+            border-bottom: none;
+        }
+
+        .search-result-item:hover,
+        .search-result-item.active {
+            background: var(--bg-secondary);
+        }
+
+        .search-result-item.active {
+            background: var(--bg-tertiary);
+        }
+
+        .search-result-title {
+            font-weight: 500;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .search-result-context {
+            font-size: 0.8125rem;
+            color: var(--text-secondary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .search-highlight {
+            background: #fef3c7;
+            padding: 0.125rem 0.25rem;
+            border-radius: 2px;
+            font-weight: 500;
+        }
+
+        .search-status {
+            padding: 0.75rem 1rem;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            text-align: center;
+        }
+
+        .search-nav {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-top: 1px solid var(--border-color);
+            background: var(--bg-tertiary);
+            font-size: 0.8125rem;
+            color: var(--text-secondary);
+        }
+
+        .search-nav-buttons {
+            margin-left: auto;
+            display: flex;
+            gap: 0.25rem;
+        }
+
+        .search-nav-button {
+            padding: 0.25rem 0.5rem;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            transition: all 0.2s ease;
+        }
+
+        .search-nav-button:hover:not(:disabled) {
+            background: var(--bg-secondary);
+            border-color: var(--primary-color);
+        }
+
+        .search-nav-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Scroll to Top */
+        .scroll-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 48px;
+            height: 48px;
+            background: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .scroll-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .scroll-top:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-toggle {
+                display: block;
+            }
+
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .main-container {
+                margin-left: 0;
+            }
+
+            .search-container {
+                display: none;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            h2 {
+                font-size: 1.5rem;
+            }
+
+            .content {
+                padding: 2rem 1rem;
+            }
+        }
+
+        /* Print Styles */
+        @media print {
+            .header, .sidebar, .scroll-top {
+                display: none;
+            }
+
+            .main-container {
+                margin: 0;
+            }
+
+            .content {
+                max-width: 100%;
+            }
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid var(--border-color);
+            border-radius: 50%;
+            border-top-color: var(--primary-color);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Smooth Scroll */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Focus Styles */
+        a:focus,
+        button:focus,
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: 2px solid var(--primary-color);
+            outline-offset: 2px;
+        }
+
+        /* Selection */
+        ::selection {
+            background: var(--primary-color);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <button class="nav-toggle" onclick="toggleSidebar()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 12h18M3 6h18M3 18h18"></path>
+                </svg>
+            </button>
+            <div class="logo">
+                <img src="media/Lagrange.AI.svg" alt="Lagrange.AI">
+                <span class="version-badge">v1.0</span>
+            </div>
+            <div class="search-container">
+                <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="m21 21-4.35-4.35"></path>
+                </svg>
+                <input type="text" class="search-input" id="searchInput" placeholder="Search documentation..." autocomplete="off">
+                <div class="search-results" id="searchResults"></div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar" id="sidebar">
+        <div class="sidebar-content">
+            <div class="nav-section">
+                <div class="nav-section-title">Getting Started</div>
+                <div class="nav-item">
+                    <a href="#introduction" class="nav-link active" onclick="navigateTo('introduction', this)">Introduction</a>
+                </div>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title">Authentication</div>
+                <div class="nav-item">
+                    <button class="nav-link has-children" onclick="toggleNavChildren(this)">
+                        User Management
+                    </button>
+                    <div class="nav-children">
+                        <a href="#sign-in-process" class="nav-link" onclick="navigateTo('sign-in-process', this)">Sign-in Process</a>
+                        <a href="#password-management" class="nav-link" onclick="navigateTo('password-management', this)">Password Management</a>
+                        <a href="#user-invitation" class="nav-link" onclick="navigateTo('user-invitation', this)">User Invitation</a>
+                        <a href="#role-based-access" class="nav-link" onclick="navigateTo('role-based-access', this)">Role-Based Access</a>
+                        <a href="#session-security" class="nav-link" onclick="navigateTo('session-security', this)">Session Security</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title">Analytics</div>
+                <div class="nav-item">
+                    <button class="nav-link has-children" onclick="toggleNavChildren(this)">
+                        Model Analytics
+                    </button>
+                    <div class="nav-children">
+                        <a href="#base-model" class="nav-link" onclick="navigateTo('base-model', this)">Base Model</a>
+                        <a href="#analytics-config" class="nav-link" onclick="navigateTo('analytics-config', this)">Configuration</a>
+                        <a href="#network-optimization" class="nav-link" onclick="navigateTo('network-optimization', this)">Network Optimization</a>
+                        <a href="#data-management" class="nav-link" onclick="navigateTo('data-management', this)">Data Management</a>
+                        <a href="#execution-monitoring" class="nav-link" onclick="navigateTo('execution-monitoring', this)">Execution & Monitoring</a>
+                        <a href="#dashboards" class="nav-link" onclick="navigateTo('dashboards', this)">Dashboards</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title">Workspace</div>
+                <div class="nav-item">
+                    <button class="nav-link has-children" onclick="toggleNavChildren(this)">
+                        Workspace Management
+                    </button>
+                    <div class="nav-children">
+                        <a href="#workspace-overview" class="nav-link" onclick="navigateTo('workspace-overview', this)">Overview</a>
+                        <a href="#workspace-creation" class="nav-link" onclick="navigateTo('workspace-creation', this)">Creating Workspaces</a>
+                        <a href="#organization-settings" class="nav-link" onclick="navigateTo('organization-settings', this)">Organization Settings</a>
+                        <a href="#user-management" class="nav-link" onclick="navigateTo('user-management', this)">User Management</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-container">
+        <div class="content">
+            <!-- Introduction Section -->
+            <section id="introduction">
+                <h1>Lagrange.AI User Guide</h1>
+                <p class="intro-text">
+                    This User Manual provides a step-by-step guide to using the Lagrange.AI platform for supply chain analytics. 
+                    It covers user authentication, workspace creation and management, and model analytics, including configuration, 
+                    execution, and dashboard reporting.
+                </p>
+
+                <div class="callout info">
+                    <div class="callout-title">Welcome to Lagrange.AI</div>
+                    <p>Leverage AI for resilient & sustainable supply chain networks. Our platform is designed to optimize supply chain management, 
+                    helping organizations track, manage, and analyze their operations efficiently.</p>
+                </div>
+            </section>
+
+            <!-- Authentication Section -->
+            <section id="sign-in-process">
+                <h2>Sign-in Process</h2>
+                <p>When you access the platform, you'll be directed to the Sign-In Page where you can:</p>
+                <ul>
+                    <li>Enter your credentials (Email or Username + Password)</li>
+                    <li>Complete reCAPTCHA (security verification)</li>
+                    <li>Use 'Remember Me' option to stay logged in</li>
+                    <li>Recover your password via the 'Forgot Password?' link</li>
+                </ul>
+
+                <div class="image-container">
+                    <img src="media/image3.png" alt="Sign-in page screenshot">
+                </div>
+            </section>
+
+            <section id="password-management">
+                <h2>Password Management</h2>
+                
+                <h3>Forgot Password</h3>
+                <ol>
+                    <li>Click 'Forgot Password? Reset Password' on the sign-in page</li>
+                    <li>Enter your registered email address</li>
+                    <li>Receive a reset link via email (expires after a set time)</li>
+                    <li>Follow the link to continue</li>
+                </ol>
+
+                <div class="image-container">
+                    <img src="media/image5.png" alt="Password reset screenshot">
+                </div>
+            </section>
+
+            <section id="user-invitation">
+                <h2>User Invitation System</h2>
+                
+                <h3>Accepting Organization Invitations</h3>
+                <ol>
+                    <li>Receive an email with an invitation link</li>
+                    <li>Click the link to open the acceptance page</li>
+                    <li>Verify your identity (create account or sign in)</li>
+                    <li>Join the organization with an assigned role</li>
+                    <li>Access granted → redirected to your workspace</li>
+                </ol>
+
+                <div class="image-container">
+                    <img src="media/image6.png" alt="Invitation email">
+                </div>
+            </section>
+
+            <section id="role-based-access">
+                <h2>Role-Based Access Control</h2>
+                
+                <h3>User Roles & Permissions</h3>
+                
+                <div class="card">
+                    <div class="card-title">Organization Admin</div>
+                    <div class="card-content">
+                        <ul>
+                            <li>Full access to organization settings</li>
+                            <li>Manage users and workspaces</li>
+                            <li>Access subscription</li>
+                            <li>Configure policies</li>
+                            <li>View analytics and reports</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">Organization User</div>
+                    <div class="card-content">
+                        <ul>
+                            <li>Access assigned workspaces</li>
+                            <li>Create and manage models</li>
+                            <li>View dashboards</li>
+                            <li>Manage personal settings only</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h3>How Roles Work</h3>
+                <ul>
+                    <li>Automatic Role Assignment (based on invitation or setup)</li>
+                    <li>Permission Enforcement (UI adapts to your role)</li>
+                    <li>Protected Routes (unauthorized users are redirected)</li>
+                    <li>Role Indicators (your role appears in settings)</li>
+                </ul>
+            </section>
+
+            <section id="session-security">
+                <h2>Session Security Management</h2>
+                
+                <h3>Auto-Lockout Timer</h3>
+                <ol>
+                    <li>System tracks your last activity</li>
+                    <li>After 15-30 mins idle, you'll get a warning</li>
+                    <li>If still idle → screen locks (password required)</li>
+                    <li>Longer inactivity → complete logout</li>
+                </ol>
+
+                <div class="callout tip">
+                    <div class="callout-title">Tip</div>
+                    <p>Any mouse or keyboard activity keeps your session active</p>
+                </div>
+
+                <h3>Session Persistence</h3>
+                
+                <h4>Remember Me Feature</h4>
+                <ul>
+                    <li>Stay logged in between browser sessions</li>
+                    <li>Secure token stored locally</li>
+                    <li>Auto re-authentication on return</li>
+                    <li>Disable on shared devices</li>
+                </ul>
+
+                <h4>Multi-Device Support</h4>
+                <ul>
+                    <li>Sign in on multiple devices</li>
+                    <li>Each session tracked separately</li>
+                    <li>Security dashboard shows active sessions</li>
+                    <li>Remotely sign out from other devices</li>
+                </ul>
+            </section>
+
+            <!-- Model Analytics Section -->
+            <section id="base-model">
+                <h2>Base Model Management</h2>
+                
+                <p>The Model Analytics & Management system is the core engine of the Lagrange platform, enabling you to create, 
+                configure, and analyze supply chain models. This feature helps optimize your supply chain network through data-driven insights.</p>
+
+                <div class="image-container">
+                    <img src="media/image8.png" alt="Base Model overview">
+                </div>
+
+                <p><strong>Location:</strong> Access via main navigation → Select workspace → 'Base Model' section</p>
+                
+                <p>Base Model is the primary template and source of truth for all sub-models. Steps to View Base Model:</p>
+                <ul>
+                    <li>Navigate to workspace homepage</li>
+                    <li>Click 'Base Model' in navigation</li>
+                    <li>View overview: Number of products, nodes, total demand, sub-model count</li>
+                </ul>
+            </section>
+
+            <section id="analytics-config">
+                <h2>Analytics Configuration</h2>
+                
+                <p>Manage predefined analytics scenarios, reusable settings, and parameter sets.</p>
+                
+                <h3>Name Your Configuration</h3>
+                <p>Enter a descriptive name that clearly reflects the settings selected for this configuration, 
+                which will determine how analytics are run.</p>
+
+                <div class="image-container">
+                    <img src="media/image9.png" alt="Configuration naming">
+                </div>
+
+                <h3>Select an Analytics Module</h3>
+                <p>Choose one of the available analytics modules for this configuration. In this example, 
+                we select the Network Optimization Analytics to define which analysis will be executed.</p>
+
+                <div class="image-container">
+                    <img src="media/image10.png" alt="Analytics module selection">
+                </div>
+            </section>
+
+            <section id="network-optimization">
+                <h2>Network Optimization</h2>
+                
+                <p>Network optimization focuses on finding the best structure for a supply chain or logistics network. 
+                The goal is to determine where flows should go and how much should be transported across the network 
+                in order to minimize cost.</p>
+
+                <h3>Echelons in the Network</h3>
+                
+                <div class="card">
+                    <div class="card-title">Single-echelon</div>
+                    <div class="card-content">
+                        <ul>
+                            <li>Involves warehouses or distribution centers (DCs) and customers</li>
+                            <li>The problem is to decide how customer demand should be served from available DCs</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">Two-echelon</div>
+                    <div class="card-content">
+                        <ul>
+                            <li>Includes factories, warehouses/DCs, and customers</li>
+                            <li>The model decides not only how to serve customers but also how products should flow from factories to warehouses</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">Three-echelon</div>
+                    <div class="card-content">
+                        <ul>
+                            <li>Consists of suppliers, factories, warehouses/DCs, and customers</li>
+                            <li>A complete view where raw materials flow from suppliers to factories, are processed, then distributed to customers</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h3>Objective Components</h3>
+                <p>Select the key elements that should be included in the optimization objective function. 
+                These components will guide the analytics in evaluating and improving your supply chain network.</p>
+
+                <div class="image-container">
+                    <img src="media/image11.png" alt="Objective components">
+                </div>
+
+                <h3>Distance Type</h3>
+                <p>Choose how distances between locations should be calculated:</p>
+                <ul>
+                    <li><strong>Straight Distance:</strong> The direct "as-the-crow-flies" distance between two points</li>
+                    <li><strong>Driving Distance:</strong> The actual road distance based on driving routes</li>
+                </ul>
+
+                <div class="image-container">
+                    <img src="media/image12.png" alt="Distance type selection">
+                </div>
+
+                <h3>Optimization Constraints</h3>
+                <p>Select the constraint types to include in your network optimization:</p>
+                <ul>
+                    <li>Capacity</li>
+                    <li>Storage</li>
+                    <li>Production</li>
+                    <li>Supply</li>
+                    <li>Product Flow</li>
+                    <li>Vehicle</li>
+                </ul>
+
+                <div class="image-container">
+                    <img src="media/image13.png" alt="Optimization constraints">
+                </div>
+            </section>
+
+            <section id="data-management">
+                <h2>Data Management</h2>
+
+                <h3>Required Data List</h3>
+                <p>Clicking on a Required Data List opens the page where you can view all the tables needed for 
+                the selected analytics configuration. Each table shows the required fields, current status, 
+                last modified date, and available actions.</p>
+
+                <div class="image-container">
+                    <img src="media/image17.png" alt="Required data list">
+                </div>
+
+                <h3>Data Preparation Process</h3>
+                <p>For each table in your analytics configuration, the data preparation process is divided into 
+                several phases to ensure your datasets are accurate, complete, and ready for analytics:</p>
+
+                <div class="card">
+                    <div class="card-title">Phase 1: Data Labeling</div>
+                    <div class="card-content">
+                        <p>Map source data fields to the corresponding model table fields. Only the required fields need to be labeled.</p>
+                        <ul>
+                            <li>Use the same field - Directly map the source column</li>
+                            <li>Use another field - Select a different column</li>
+                            <li>No Labeling - Skip optional fields</li>
+                            <li>Ignore - Exclude fields not needed</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">Phase 2: Data Verification</div>
+                    <div class="card-content">
+                        <p>Check the mapped data for correctness and completeness. The system checks each field for:</p>
+                        <ul>
+                            <li>Missing values</li>
+                            <li>Incorrect types</li>
+                            <li>Invalid formats</li>
+                            <li>Constraint violations</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">Phase 3: Data Consistency</div>
+                    <div class="card-content">
+                        <p>Ensure that the dataset complies with business rules and maintains integrity across multiple fields and external references.</p>
+                        <ul>
+                            <li>External Reference Consistency</li>
+                            <li>Cross-Field Validation</li>
+                            <li>Business Rule Validation</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">Phase 4: Summary and Metrics</div>
+                    <div class="card-content">
+                        <p>Review overall status, identify issues, and confirm readiness for analytics. Key metrics include:</p>
+                        <ul>
+                            <li>Completeness Metrics</li>
+                            <li>Validity Metrics</li>
+                            <li>Accuracy Metrics</li>
+                            <li>Consistency Metrics</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h3>Upload Options</h3>
+                
+                <h4>Batch Upload</h4>
+                <p>You can select multiple tables at once and use the Batch Upload option at the top of the page 
+                to upload all selected datasets together.</p>
+
+                <div class="image-container">
+                    <img src="media/image18.png" alt="Batch upload">
+                </div>
+
+                <div class="callout info">
+                    <div class="callout-title">Upload Actions</div>
+                    <ul>
+                        <li><strong>Overwrite Existing Data:</strong> Replace any previous data with the new upload</li>
+                        <li><strong>Insert Rows at the End (Append):</strong> Add the new data to the end of the existing data</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="execution-monitoring">
+                <h2>Execution & Monitoring</h2>
+
+                <p>This page provides a real-time overview of your analytics execution.</p>
+
+                <h3>Execution Summary</h3>
+                <ul>
+                    <li><strong>Name:</strong> The scenario name (e.g., OptimizationScenario_1)</li>
+                    <li><strong>Type:</strong> Type of process (analytic)</li>
+                    <li><strong>Status:</strong> Current execution status (running, completed, or failed)</li>
+                    <li><strong>Start Time:</strong> When the analytics run began</li>
+                    <li><strong>Duration:</strong> Elapsed time since the run started</li>
+                    <li><strong>Submitted By:</strong> User who initiated the run</li>
+                </ul>
+
+                <div class="image-container">
+                    <img src="media/image32.png" alt="Execution monitoring">
+                </div>
+
+                <h3>Phase Details</h3>
+                <p>Each analytics run consists of multiple phases. For each phase, you can view:</p>
+                <ul>
+                    <li><strong>Phase Name:</strong> Name of the phase (e.g., Analytics Run, Dashboard Creation)</li>
+                    <li><strong>Status:</strong> Current status of the phase</li>
+                    <li><strong>Start Time:</strong> Phase start time</li>
+                    <li><strong>Duration:</strong> Time elapsed for the phase</li>
+                    <li><strong>Actions:</strong> Options such as Download Logs to review phase details</li>
+                </ul>
+
+                <div class="callout tip">
+                    <div class="callout-title">Additional Options</div>
+                    <p>From the top of the page, you can download logs for the entire run and view models that have been generated by the analytics run.</p>
+                </div>
+            </section>
+
+            <section id="dashboards">
+                <h2>Dashboards</h2>
+
+                <p>You can access the dashboard for a created model in two ways:</p>
+                <ol>
+                    <li><strong>From the Execution Details:</strong> After running a model, click View Model to navigate to the model's page</li>
+                    <li><strong>From the Base Model Dashboards:</strong> Navigate to the Dashboards section of the Base Model</li>
+                </ol>
+
+                <h3>Dashboard Structure</h3>
+                <ul>
+                    <li>Each dashboard can contain multiple pages</li>
+                    <li>Each page may include several charts, providing a comprehensive view of analytics and performance metrics</li>
+                </ul>
+
+                <div class="image-container">
+                    <img src="media/image37.png" alt="Dashboard view">
+                </div>
+
+                <h3>Dashboard Editing</h3>
+                <p>This page allows users to modify existing dashboards, manage pages, and configure charts.</p>
+
+                <h4>Page Management (Left Panel)</h4>
+                <ul>
+                    <li>Displays all pages in the dashboard</li>
+                    <li>Select Page: Click a page to view or edit its charts</li>
+                    <li>Add New Page: Button to create additional pages</li>
+                    <li>Reorder Pages: Drag and drop pages to change their sequence</li>
+                </ul>
+
+                <h4>Chart Management (Right Panel)</h4>
+                <ul>
+                    <li>Shows all charts associated with the selected page</li>
+                    <li>Add New Chart: Button enabled only when a page is selected</li>
+                    <li>Edit Chart: Modify chart properties</li>
+                    <li>Remove Chart: Deletes chart from the page</li>
+                </ul>
+
+                <div class="image-container">
+                    <img src="media/image38.png" alt="Dashboard editing">
+                </div>
+
+                <h3>Adding New Charts</h3>
+                <p>The modal allows users to add charts to a selected dashboard page:</p>
+
+                <div class="card">
+                    <div class="card-title">Function Selection</div>
+                    <div class="card-content">
+                        <ul>
+                            <li>Displays a searchable and filterable table of available functions</li>
+                            <li>Users can select a single function to create a chart</li>
+                            <li>Filter and search options are available</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">Chart Configuration</div>
+                    <div class="card-content">
+                        <ul>
+                            <li>Chart Name: Auto-populated based on the selected function</li>
+                            <li>Select Chart Types: Bar, Line, Pie, Table, Area, Tree, Funnel, Heatmap</li>
+                            <li>Multiple chart types can be selected for the same function</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="image-container">
+                    <img src="media/image39.png" alt="Add new chart">
+                </div>
+            </section>
+
+            <!-- Workspace Management Section -->
+            <section id="workspace-overview">
+                <h2>Workspace Management Overview</h2>
+                
+                <p>Multi-tenant workspace system enabling organized supply chain analytics with visual workspace identification, 
+                quick access features, and comprehensive organization management.</p>
+
+                <h3>Welcome Interface</h3>
+                <p>Key Components:</p>
+                <ul>
+                    <li>Organization Settings (Admin only) - policies</li>
+                    <li>User Settings - Profile, notifications, security</li>
+                    <li>Create Workspace</li>
+                    <li>Quick Access</li>
+                </ul>
+
+                <div class="image-container">
+                    <img src="media/image40.png" alt="Welcome interface">
+                </div>
+
+                <h3>Workspace Display</h3>
+                <div class="image-container">
+                    <img src="media/image41.png" alt="Workspace display">
+                </div>
+
+                <h3>Workspace Actions</h3>
+                <p>Dropdown Menu: Preview, Delete (confirmation required)</p>
+                <p>Click Actions: Single click to navigate to workspace and set it as active</p>
+
+                <div class="image-container">
+                    <img src="media/image42.png" alt="Workspace actions">
+                </div>
+            </section>
+
+            <section id="workspace-creation">
+                <h2>Workspace Creation</h2>
+                
+                <h3>Required Fields</h3>
+                <ul>
+                    <li><strong>Workspace Title:</strong> Unique, descriptive name</li>
+                    <li><strong>Description (Optional):</strong> Purpose and scope, key objectives</li>
+                    <li><strong>Workspace Members:</strong> Multi-select from organization users</li>
+                </ul>
+
+                <h3>Creation Process</h3>
+                <ol>
+                    <li>Open modal</li>
+                    <li>Fill information</li>
+                    <li>Submit & Confirm</li>
+                </ol>
+
+                <div class="image-container">
+                    <img src="media/image44.png" alt="Create workspace modal">
+                </div>
+            </section>
+
+            <section id="organization-settings">
+                <h2>Organization Settings</h2>
+                
+                <p>Includes the following features:</p>
+                <ul>
+                    <li><strong>Overview:</strong> High-level summary of your organization's activity and key metrics</li>
+                    <li><strong>Workspaces:</strong> Manage, create, and configure all organizational workspaces</li>
+                    <li><strong>Users:</strong> Add, remove, and manage user roles and permissions</li>
+                    <li><strong>Policies:</strong> Define and enforce organization-wide rules and security settings</li>
+                </ul>
+
+                <div class="image-container">
+                    <img src="media/image46.png" alt="Organization settings">
+                </div>
+
+                <h3>Workspace Management Table</h3>
+                <p>The Management Table includes title, description, created by, date, last modified, and actions.</p>
+                <p>Administrative Actions: Edit workspace, Delete workspace.</p>
+
+                <div class="image-container">
+                    <img src="media/image48.png" alt="Workspace management table">
+                </div>
+            </section>
+
+            <section id="user-management">
+                <h2>User Management</h2>
+                
+                <p>Displays user information and roles within the organization, with options to edit, activate, or deactivate users.</p>
+
+                <div class="image-container">
+                    <img src="media/image49.png" alt="User management">
+                </div>
+
+                <h3>Common Workflows</h3>
+                
+                <h4>Creating New Workspace</h4>
+                <p>Navigate to Management → Create Workspace → Configure Workspace → Invite Team</p>
+
+                <h4>Accessing Workspace</h4>
+                <p>From Home Page or Quick Access → Select workspace → Auto-navigates to base model</p>
+
+                <h4>Managing Members</h4>
+                <p><strong>Add Members:</strong> Edit workspace → Select users → Assign roles → Save changes</p>
+                <p><strong>Remove Members:</strong> Edit workspace → Deselect users → Confirm removal → Update permissions</p>
+
+                <div class="callout warning">
+                    <div class="callout-title">Common Issues & Solutions</div>
+                    <ul>
+                        <li>Cannot create workspace → Check plan limits or permissions</li>
+                        <li>Duplicate name error → Use unique workspace name</li>
+                        <li>Members not appearing → Verify organization membership</li>
+                        <li>Delete confirmation fails → Type exact workspace name</li>
+                        <li>Color not displaying → Refresh page or clear cache</li>
+                        <li>Quick access empty → Start using workspaces to populate</li>
+                    </ul>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- Scroll to Top Button -->
+    <div class="scroll-top" id="scrollTop" onclick="scrollToTop()">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="m18 15-6-6-6 6"/>
+        </svg>
+    </div>
+
+    <script>
+        // Navigation functionality
+        function navigateTo(sectionId, linkElement) {
+            // Remove active class from all links
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            
+            // Add active class to clicked link
+            linkElement.classList.add('active');
+            
+            // Scroll to section
+            const section = document.getElementById(sectionId);
+            if (section) {
+                section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                
+                // Close sidebar on mobile
+                if (window.innerWidth <= 768) {
+                    document.getElementById('sidebar').classList.remove('open');
+                }
+            }
+        }
+
+        // Toggle navigation children
+        function toggleNavChildren(button) {
+            const children = button.nextElementSibling;
+            const isExpanded = children.classList.contains('show');
+            
+            // Close all other expanded sections
+            document.querySelectorAll('.nav-children.show').forEach(child => {
+                child.classList.remove('show');
+                child.previousElementSibling.classList.remove('expanded');
+            });
+            
+            // Toggle current section
+            if (!isExpanded) {
+                children.classList.add('show');
+                button.classList.add('expanded');
+            }
+        }
+
+        // Toggle sidebar on mobile
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('open');
+        }
+
+        // Enhanced Search functionality
+        let searchResults = [];
+        let currentSearchIndex = 0;
+        let searchDebounceTimer = null;
+
+        function initSearch() {
+            const searchInput = document.getElementById('searchInput');
+            const searchResultsContainer = document.getElementById('searchResults');
+            
+            // Search as you type with debouncing
+            searchInput.addEventListener('input', (e) => {
+                clearTimeout(searchDebounceTimer);
+                const query = e.target.value.trim();
+                
+                if (query.length < 2) {
+                    searchResultsContainer.classList.remove('show');
+                    clearSearchHighlights();
+                    return;
+                }
+                
+                searchDebounceTimer = setTimeout(() => {
+                    performSearch(query);
+                }, 300);
+            });
+            
+            // Keyboard navigation in search results
+            searchInput.addEventListener('keydown', (e) => {
+                const resultItems = searchResultsContainer.querySelectorAll('.search-result-item');
+                
+                if (e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    if (resultItems.length > 0) {
+                        currentSearchIndex = Math.min(currentSearchIndex + 1, resultItems.length - 1);
+                        updateActiveSearchResult(resultItems);
+                    }
+                } else if (e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    if (resultItems.length > 0) {
+                        currentSearchIndex = Math.max(currentSearchIndex - 1, 0);
+                        updateActiveSearchResult(resultItems);
+                    }
+                } else if (e.key === 'Enter') {
+                    e.preventDefault();
+                    const activeItem = searchResultsContainer.querySelector('.search-result-item.active');
+                    if (activeItem) {
+                        activeItem.click();
+                    }
+                } else if (e.key === 'Escape') {
+                    searchInput.value = '';
+                    searchResultsContainer.classList.remove('show');
+                    clearSearchHighlights();
+                }
+            });
+            
+            // Close search results when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!e.target.closest('.search-container')) {
+                    searchResultsContainer.classList.remove('show');
+                }
+            });
+        }
+
+        function performSearch(query) {
+            const searchResultsContainer = document.getElementById('searchResults');
+            searchResults = [];
+            currentSearchIndex = 0;
+            
+            // Clear previous highlights
+            clearSearchHighlights();
+            
+            // Search through all sections
+            const sections = document.querySelectorAll('section');
+            const headings = document.querySelectorAll('h1, h2, h3, h4');
+            
+            // Search in headings first (higher priority)
+            headings.forEach(heading => {
+                const text = heading.textContent.toLowerCase();
+                const queryLower = query.toLowerCase();
+                
+                if (text.includes(queryLower)) {
+                    const section = heading.closest('section');
+                    if (section) {
+                        searchResults.push({
+                            title: heading.textContent,
+                            context: getContextAroundMatch(heading.parentElement.textContent, query),
+                            element: heading,
+                            section: section,
+                            priority: getHeadingPriority(heading.tagName)
+                        });
+                    }
+                }
+            });
+            
+            // Search in content (lower priority)
+            sections.forEach(section => {
+                const text = section.textContent.toLowerCase();
+                const queryLower = query.toLowerCase();
+                
+                if (text.includes(queryLower)) {
+                    // Check if we already have this section from heading search
+                    const alreadyAdded = searchResults.some(r => r.section === section);
+                    
+                    if (!alreadyAdded) {
+                        const heading = section.querySelector('h1, h2, h3, h4');
+                        searchResults.push({
+                            title: heading ? heading.textContent : 'Section',
+                            context: getContextAroundMatch(section.textContent, query),
+                            element: section,
+                            section: section,
+                            priority: 10
+                        });
+                    }
+                }
+            });
+            
+            // Sort by priority (lower number = higher priority)
+            searchResults.sort((a, b) => a.priority - b.priority);
+            
+            // Display results
+            displaySearchResults(searchResults, query);
+        }
+
+        function getHeadingPriority(tagName) {
+            const priorities = { 'H1': 1, 'H2': 2, 'H3': 3, 'H4': 4 };
+            return priorities[tagName] || 5;
+        }
+
+        function getContextAroundMatch(text, query) {
+            const index = text.toLowerCase().indexOf(query.toLowerCase());
+            if (index === -1) return text.substring(0, 100) + '...';
+            
+            const start = Math.max(0, index - 40);
+            const end = Math.min(text.length, index + query.length + 40);
+            
+            let context = text.substring(start, end);
+            if (start > 0) context = '...' + context;
+            if (end < text.length) context = context + '...';
+            
+            return context;
+        }
+
+        function displaySearchResults(results, query) {
+            const searchResultsContainer = document.getElementById('searchResults');
+            
+            if (results.length === 0) {
+                searchResultsContainer.innerHTML = '<div class="search-status">No results found</div>';
+                searchResultsContainer.classList.add('show');
+                return;
+            }
+            
+            let html = '';
+            
+            results.slice(0, 10).forEach((result, index) => {
+                const highlightedTitle = highlightText(result.title, query);
+                const highlightedContext = highlightText(result.context, query);
+                
+                html += `
+                    <div class="search-result-item ${index === 0 ? 'active' : ''}" data-index="${index}">
+                        <div class="search-result-title">${highlightedTitle}</div>
+                        <div class="search-result-context">${highlightedContext}</div>
+                    </div>
+                `;
+            });
+            
+            if (results.length > 10) {
+                html += `<div class="search-status">Showing 10 of ${results.length} results</div>`;
+            }
+            
+            // Add navigation controls
+            html += `
+                <div class="search-nav">
+                    <span>Press ↑↓ to navigate, Enter to select, Esc to close</span>
+                </div>
+            `;
+            
+            searchResultsContainer.innerHTML = html;
+            searchResultsContainer.classList.add('show');
+            
+            // Add click handlers to results
+            searchResultsContainer.querySelectorAll('.search-result-item').forEach((item, index) => {
+                item.addEventListener('click', () => {
+                    navigateToSearchResult(results[index]);
+                    searchResultsContainer.classList.remove('show');
+                    document.getElementById('searchInput').value = '';
+                });
+                
+                item.addEventListener('mouseenter', () => {
+                    currentSearchIndex = index;
+                    updateActiveSearchResult(searchResultsContainer.querySelectorAll('.search-result-item'));
+                });
+            });
+        }
+
+        function highlightText(text, query) {
+            const regex = new RegExp(`(${escapeRegExp(query)})`, 'gi');
+            return text.replace(regex, '<span class="search-highlight">$1</span>');
+        }
+
+        function escapeRegExp(string) {
+            return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        }
+
+        function updateActiveSearchResult(items) {
+            items.forEach((item, index) => {
+                if (index === currentSearchIndex) {
+                    item.classList.add('active');
+                    item.scrollIntoView({ block: 'nearest' });
+                } else {
+                    item.classList.remove('active');
+                }
+            });
+        }
+
+        function navigateToSearchResult(result) {
+            // Scroll to the element
+            result.element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            
+            // Highlight the result
+            result.section.style.background = '#fef3c7';
+            setTimeout(() => {
+                result.section.style.background = '';
+            }, 2000);
+            
+            // Update navigation to show active section
+            const sectionId = result.section.getAttribute('id');
+            if (sectionId) {
+                const navLink = document.querySelector(`.nav-link[href="#${sectionId}"]`);
+                if (navLink) {
+                    document.querySelectorAll('.nav-link').forEach(link => {
+                        link.classList.remove('active');
+                    });
+                    navLink.classList.add('active');
+                    
+                    // Expand parent if it's collapsed
+                    const parent = navLink.closest('.nav-children');
+                    if (parent && !parent.classList.contains('show')) {
+                        parent.classList.add('show');
+                        parent.previousElementSibling.classList.add('expanded');
+                    }
+                }
+            }
+        }
+
+        function clearSearchHighlights() {
+            document.querySelectorAll('section').forEach(section => {
+                section.style.background = '';
+            });
+        }
+
+        // Scroll to top functionality
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Show/hide scroll to top button
+        window.addEventListener('scroll', () => {
+            const scrollTop = document.getElementById('scrollTop');
+            if (window.pageYOffset > 300) {
+                scrollTop.classList.add('visible');
+            } else {
+                scrollTop.classList.remove('visible');
+            }
+            
+            // Update active nav link based on scroll position
+            const sections = document.querySelectorAll('section');
+            const scrollPosition = window.pageYOffset + 100;
+            
+            sections.forEach(section => {
+                const top = section.offsetTop;
+                const height = section.offsetHeight;
+                const id = section.getAttribute('id');
+                
+                if (scrollPosition >= top && scrollPosition < top + height) {
+                    document.querySelectorAll('.nav-link').forEach(link => {
+                        link.classList.remove('active');
+                        if (link.getAttribute('href') === '#' + id) {
+                            link.classList.add('active');
+                        }
+                    });
+                }
+            });
+        });
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            // Expand first navigation section by default
+            const firstNavButton = document.querySelector('.nav-link.has-children');
+            if (firstNavButton) {
+                toggleNavChildren(firstNavButton);
+            }
+            
+            // Initialize search
+            initSearch();
+        });
+
+        // Handle responsive behavior
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 768) {
+                document.getElementById('sidebar').classList.remove('open');
+            }
+        });
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            // Press '/' to focus search (but not when already in an input field)
+            if (e.key === '/' && !e.ctrlKey && !e.metaKey && e.target.tagName !== 'INPUT') {
+                e.preventDefault();
+                document.getElementById('searchInput').focus();
+            }
+            
+            // Press 'Escape' to close mobile sidebar (when not in search)
+            if (e.key === 'Escape' && e.target.id !== 'searchInput') {
+                document.getElementById('sidebar').classList.remove('open');
+            }
+        });
+
+        // Print functionality
+        window.addEventListener('beforeprint', () => {
+            // Expand all sections for printing
+            document.querySelectorAll('.nav-children').forEach(child => {
+                child.classList.add('show');
+            });
+        });
+
+        window.addEventListener('afterprint', () => {
+            // Collapse sections after printing
+            document.querySelectorAll('.nav-children').forEach(child => {
+                child.classList.remove('show');
+            });
+        });
+    </script>
+</body>
+</html>

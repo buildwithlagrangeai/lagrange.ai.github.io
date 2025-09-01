@@ -1,0 +1,52 @@
+# GitHub Pages Configuration for Lagrange.AI Documentation
+
+# Site settings
+title: Lagrange.AI User Guide
+description: Lagrange.AI supply chain analytics platform documentation
+baseurl: "" # Set to "/repository-name" if not using custom domain
+url: "" # Set to "https://username.github.io" or your custom domain
+
+# Build settings
+# Since we're serving static HTML, we exclude Jekyll processing for most files
+plugins: []
+
+# Exclude files from processing
+exclude:
+  - README.md
+  - deploy.sh
+  - .git
+  - .gitignore
+  - node_modules
+  - package.json
+  - package-lock.json
+
+# Include specific files that start with . or _
+include:
+  - .nojekyll
+  - _config.yml
+
+# GitHub Pages settings
+github:
+  is_project_page: false
+  is_user_page: false
+
+# Optional: Custom domain (uncomment and set if you have one)
+# domain: docs.lagrange.ai
+
+# Performance optimizations
+compress_html:
+  comments: all
+  endings: all
+  profile: false
+  blanklines: false
+
+# Asset optimization
+sass:
+  style: compressed
+
+# Default serving
+defaults:
+  - scope:
+      path: ""
+    values:
+      layout: "none"
